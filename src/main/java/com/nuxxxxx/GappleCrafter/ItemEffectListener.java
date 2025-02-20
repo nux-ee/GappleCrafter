@@ -1,5 +1,5 @@
 package com.nuxxxxx.GappleCrafter;
-
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
