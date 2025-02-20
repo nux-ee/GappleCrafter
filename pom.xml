@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.yourname</groupId> <!-- Replace with your package name -->
+    <artifactId>GappleCrafter</artifactId> <!-- Plugin name -->
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>GappleCrafter</name> <!-- Plugin name -->
+    <description>A Minecraft plugin that allows crafting of golden apples.</description>
+    <url>https://github.com/YOUR_USERNAME/GappleCrafter</url> <!-- Your GitHub repo link -->
+
+    <!-- Define dependencies -->
+    <dependencies>
+        <!-- Paper API (or Spigot API) -->
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.4-R0.1-SNAPSHOT</version> <!-- Use correct version -->
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Optional: Add more dependencies if needed, e.g., for JSON parsing or other features -->
+    </dependencies>
+
+    <!-- Build plugins -->
+    <build>
+        <plugins>
+            <!-- Maven Shade Plugin (creates fat jar) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- Repositories for Paper (Optional: if using other repositories) -->
+    <repositories>
+        <repository>
+            <id>papermc-repo</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+</project>
