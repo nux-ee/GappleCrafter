@@ -1,4 +1,5 @@
 package com.nux.ee.GappleCrafter;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class GappleCrafter extends JavaPlugin {
@@ -6,7 +7,7 @@ public class GappleCrafter extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("GappleCrafter has been enabled!");
-        RecipeManager.addRecipes(this);  // Add custom crafting recipes
+        RecipeManager.setup(this);  // Load recipes from config
     }
 
     @Override
