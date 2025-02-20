@@ -73,6 +73,27 @@ public class RecipeManager {
 
         plugin.getServer().addRecipe(recipe);
         plugin.getLogger().info("Notch Apple recipe has been enabled and added.");
+
+        // Apply the Enchanted Golden Apple effects
+        applyNotchAppleEffects(notchApple);
+    }
+
+    private static void applyNotchAppleEffects(ItemStack item) {
+        List<Map<String, Object>> effects = List.of(
+            createEffect("REGENERATION", 100, 1),  // 5 seconds of Regeneration
+            createEffect("ABSORPTION", 2400, 1),  // 2 minutes of Absorption
+            createEffect("RESISTANCE", 100, 0)    // 5 seconds of Resistance
+        );
+
+        applyEffects(item, effects);
+    }
+
+    private static Map<String, Object> createEffect(String effectType, int duration, int amplifier) {
+        return Map.of(
+            "type", effectType,
+            "duration", duration,
+            "amplifier", amplifier
+        );
     }
 
     private static void addCustomRecipe(String key, Map<String, Object> recipeData) {
@@ -147,6 +168,10 @@ public class RecipeManager {
                 return PotionEffectType.STRENGTH;
             case "JUMP":
                 return PotionEffectType.JUMP_BOOST;
+            case "ABSORPTION":
+                return PotionEffectType.ABSORPTION;
+            case "RESISTANCE":
+                return PotionEffectType.DAMAGE_RESISTANCE;
             default:
                 return null;
         }
