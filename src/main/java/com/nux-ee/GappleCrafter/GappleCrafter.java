@@ -13,4 +13,4 @@ public class GappleCrafter extends JavaPlugin {
     public void onDisable() {
         getLogger().info("GappleCrafter has been disabled.");
     }
-}
+};
