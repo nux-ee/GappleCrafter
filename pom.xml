@@ -51,6 +51,7 @@
                         </goals>
                         <configuration>
                             <finalName>GappleCrafter-1.0.1-SNAPSHOT</finalName>  <!-- Customize output file name -->
+                            <classifier>plugin</classifier>
                         </configuration>
                     </execution>
                 </executions>
