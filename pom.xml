@@ -13,21 +13,17 @@
     <description>A Minecraft plugin that allows crafting of golden apples.</description>
     <url>https://github.com/nux-ee/GappleCrafter</url> <!-- Your GitHub repo link -->
 
-<dependencies>
-    <dependency>
-        <groupId>io.papermc</groupId>
-        <artifactId>paper-api</artifactId>
-        <version>1.21.4</version>  <!-- Use a stable version -->
-        <scope>provided</scope>
-    </dependency>
-</dependencies>
+<dependency>
+    <groupId>io.papermc.paper</groupId>
+    <artifactId>paper-api</artifactId>
+    <version>1.21.4-R0.1-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
 
-<repositories>
-    <repository>
-        <id>papermc-repo</id>
-        <url>https://repo.papermc.io/repository/maven-public/</url>
-    </repository>
-</repositories>
+<repository>
+    <id>papermc</id>
+    <url>https://repo.papermc.io/repository/maven-public/</url>
+</repository>
 
 
     <!-- Build plugins -->
