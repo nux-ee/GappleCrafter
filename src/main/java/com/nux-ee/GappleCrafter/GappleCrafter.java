@@ -4,11 +4,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class GappleCrafter extends JavaPlugin {
 
-    @Override
-    public void onEnable() {
-        getLogger().info("GappleCrafter has been enabled!");
-        RecipeManager.setup(this);  // Load recipes from config
-    }
+@Override
+public void onEnable() {
+    getLogger().info("GappleCrafter has been enabled!");
+    saveDefaultConfig();  // Save the default config if it doesn't exist
+    RecipeManager.setup(this);  // Load recipes from the config
+}
+
 
     @Override
     public void onDisable() {
