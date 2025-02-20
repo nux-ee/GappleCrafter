@@ -126,18 +126,18 @@ public class RecipeManager {
         }
     }
 
-    private static PotionEffectType getPotionEffectType(String effectType) {
-        switch (effectType.toUpperCase()) {
-            case "REGENERATION":
-                return PotionEffectType.REGENERATION;
-            case "SPEED":
-                return PotionEffectType.SPEED;
-            case "STRENGTH":
-                return PotionEffectType.INCREASE_DAMAGE;
-            case "JUMP":
-                return PotionEffectType.JUMP;
-            default:
-                return null;
-        }
+private static PotionEffectType getPotionEffectType(String effectType) {
+    switch (effectType.toUpperCase()) {
+        case "REGENERATION":
+            return PotionEffectType.REGENERATION;
+        case "SPEED":
+            return PotionEffectType.SPEED;
+        case "STRENGTH":
+            return PotionEffectType.STRENGTH;  // Correct constant for Strength
+        case "JUMP":
+            return PotionEffectType.JUMP_BOOST;  // Correct constant for Jump Boost
+        default:
+            return null;
     }
+}
 }
