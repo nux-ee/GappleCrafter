@@ -12,36 +12,45 @@
     <name>GappleCrafter</name> <!-- Plugin name -->
     <description>A Minecraft plugin that allows crafting of golden apples.</description>
     <url>https://github.com/nux-ee/GappleCrafter</url> <!-- Your GitHub repo link -->
-<dependencies>
-<dependency>
-    <groupId>io.papermc.paper</groupId>
-    <artifactId>paper-api</artifactId>
-    <version>1.21.4-R0.1-SNAPSHOT</version>
-    <scope>provided</scope>
-</dependency>
-</dependencies>
 
-<repositories>
-<repository>
-    <id>papermc</id>
-    <url>https://repo.papermc.io/repository/maven-public/</url>
-</repository>
-</repositories>
+    <dependencies>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
+    <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
 
     <!-- Build plugins -->
     <build>
+        <resources>
+            <!-- Ensure plugin.yml gets included in the final JAR -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
-            <!-- Maven Shade Plugin (creates fat jar) -->
+            <!-- You can omit the shade plugin unless you are creating a fat JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
