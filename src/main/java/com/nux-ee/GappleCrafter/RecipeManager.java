@@ -135,7 +135,7 @@ public class RecipeManager {
             case "STRENGTH":
                 return PotionEffectType.INCREASE_DAMAGE;
             case "JUMP":
-                return PotionEffectType.JUMP;
+                return PotionEffectType.JUMP_BOOST;
             default:
                 return null;
         }
