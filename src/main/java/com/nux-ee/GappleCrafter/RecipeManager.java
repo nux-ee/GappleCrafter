@@ -1,4 +1,4 @@
-package com.nux-ee.gapplecrafter;
+package com.nux-ee.GappleCrafter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
