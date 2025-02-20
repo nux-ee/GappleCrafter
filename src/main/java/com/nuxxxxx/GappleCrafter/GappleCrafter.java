@@ -8,12 +8,17 @@ public class GappleCrafter extends JavaPlugin {
     public void onEnable() {
         getLogger().info("GappleCrafter has been enabled!");
         saveDefaultConfig();  // Ensure the default config exists
-        RecipeManager.setup(this);  // Load recipes and effects from the config
-        getServer().getPluginManager().registerEvents(new ItemEffectListener(this), this);  // Pass the plugin instance to the listener
+
+        // Load recipes and effects from the config
+        RecipeManager.setup(this);  
+
+        // Register the event listener with the plugin instance passed
+        getServer().getPluginManager().registerEvents(new ItemEffectListener(this), this);  
     }
 
     @Override
     public void onDisable() {
         getLogger().info("GappleCrafter has been disabled.");
+        // You can add additional cleanup tasks if necessary
     }
 }
