@@ -30,8 +30,6 @@
     </repositories>
 
     <build>
-        <finalName>GappleCrafter-1.0-SNAPSHOT</finalName> <!-- Optional, for naming the output JAR -->
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -51,6 +49,9 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <configuration>
+                            <finalName>GappleCrafter-1.0.1-SNAPSHOT</finalName>  <!-- Customize output file name -->
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
