@@ -1,0 +1,12 @@
+name: GappleCrafter
+version: 1.0
+main: com.yourname.gapplecrafter.GappleCrafter
+api-version: 1.21.4
+commands:
+  craftgapple:
+    description: Craft a golden apple
+    usage: /<command>
+permissions:
+  gapplecrafter.craft:
+    description: Allows crafting of golden apples
+    default: op
