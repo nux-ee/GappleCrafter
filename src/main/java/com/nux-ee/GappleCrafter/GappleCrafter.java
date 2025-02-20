@@ -1,4 +1,4 @@
-package com.yourname.gapplecrafter;
+package com.nux-ee.gapplecrafter;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
