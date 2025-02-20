@@ -7,9 +7,11 @@ public class GappleCrafter extends JavaPlugin {
 @Override
 public void onEnable() {
     getLogger().info("GappleCrafter has been enabled!");
-    saveDefaultConfig();  // Save the default config if it doesn't exist
-    RecipeManager.setup(this);  // Load recipes from the config
+    saveDefaultConfig();  // Ensure the default config exists
+    RecipeManager.setup(this);  // Load recipes and effects from the config
+    getServer().getPluginManager().registerEvents(new ItemEffectListener(), this);  // Register the listener
 }
+
 
 
     @Override
