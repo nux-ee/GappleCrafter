@@ -133,7 +133,7 @@ private static PotionEffectType getPotionEffectType(String effectType) {
         case "SPEED":
             return PotionEffectType.SPEED;
         case "STRENGTH":
-            return PotionEffectType.INCREASE_DAMAGE;  // Correct constant for Strength
+            return PotionEffectType.STRENGTH;  // Correct constant for Strength
         case "JUMP":
             return PotionEffectType.JUMP_BOOST;  // Correct constant for Jump Boost
         default:
