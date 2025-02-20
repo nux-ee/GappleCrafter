@@ -1,5 +1,3 @@
-# recipe_config.yml
-
 recipes:
   enchanted_potato:
     result: POTATO
@@ -15,7 +13,6 @@ recipes:
       - type: REGENERATION
         duration: 200
         amplifier: 1
-
   enchanted_carrot:
     result: GOLDEN_CARROT
     amount: 1
