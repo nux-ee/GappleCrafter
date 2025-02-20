@@ -23,27 +23,26 @@ public class RecipeManager {
     }
 
     public static void loadRecipes() {
-        // Load the recipes and enable/disable settings from config files
+        // Load the config to check which recipes are enabled
         File configFile = new File(plugin.getDataFolder(), "config.yml");
         if (!configFile.exists()) {
-            plugin.saveResource("config.yml", false); // Save the default config if it doesn't exist
+            plugin.saveResource("config.yml", false); // Save default config if it doesn't exist
         }
-
         plugin.reloadConfig();
+
+        // Hardcoded Notch Apple
+        if (plugin.getConfig().getBoolean("recipes.notch_apple", false)) {
+            addNotchAppleRecipe();
+        }
 
         // Load custom recipes from recipe_config.yml
         File recipesFile = new File(plugin.getDataFolder(), "recipe_config.yml");
         if (!recipesFile.exists()) {
             plugin.saveResource("recipe_config.yml", false); // Save default recipes if not present
         }
-
         plugin.reloadConfig();
-        Map<String, Object> recipes = plugin.getConfig().getConfigurationSection("recipes").getValues(false);
 
-        // Hardcoded Notch Apple
-        if (plugin.getConfig().getBoolean("recipes.notch_apple", false)) {
-            addNotchAppleRecipe();
-        }
+        Map<String, Object> recipes = plugin.getConfig().getConfigurationSection("recipes.custom_recipes").getValues(false);
 
         // Load and add custom recipes based on config
         for (String recipeKey : recipes.keySet()) {
@@ -126,18 +125,18 @@ public class RecipeManager {
         }
     }
 
-private static PotionEffectType getPotionEffectType(String effectType) {
-    switch (effectType.toUpperCase()) {
-        case "REGENERATION":
-            return PotionEffectType.REGENERATION;
-        case "SPEED":
-            return PotionEffectType.SPEED;
-        case "STRENGTH":
-            return PotionEffectType.STRENGTH;  // Correct constant for Strength
-        case "JUMP":
-            return PotionEffectType.JUMP_BOOST;  // Correct constant for Jump Boost
-        default:
-            return null;
+    private static PotionEffectType getPotionEffectType(String effectType) {
+        switch (effectType.toUpperCase()) {
+            case "REGENERATION":
+                return PotionEffectType.REGENERATION;
+            case "SPEED":
+                return PotionEffectType.SPEED;
+            case "STRENGTH":
+                return PotionEffectType.STRENGTH;  // Correct constant for Strength
+            case "JUMP":
+                return PotionEffectType.JUMP_BOOST;  // Correct constant for Jump Boost
+            default:
+                return null;
+        }
     }
-}
 }
