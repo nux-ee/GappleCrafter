@@ -1,4 +1,4 @@
-package com.nux.ee.GappleCrafter;
+package com.nuxxxxx.GappleCrafter;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
