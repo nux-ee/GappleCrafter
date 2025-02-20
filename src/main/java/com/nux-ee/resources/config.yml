@@ -1,7 +1,7 @@
 # config.yml
 recipes:
   notch_apple: true  # Enable or disable the Notch Apple recipe (hardcoded)
-  custom_recipes:  # Enable or disable custom recipes defined in recipes.config.yml
+  custom_recipes:  # Enable or disable custom recipes defined in recipe_config.yml
     enchanted_potato: true
     enchanted_carrot: false
     # Add more custom recipes here as you define them
