@@ -1,6 +1,5 @@
 package com.nuxxxxx.GappleCrafter;
 
-import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -8,46 +7,38 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
 import java.util.Map;
 
 public class ItemEffectListener implements Listener {
 
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
 
+    // Constructor now accepts a JavaPlugin instance
     public ItemEffectListener(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
     public void onPlayerConsume(PlayerItemConsumeEvent event) {
-        Material itemType = event.getItem().getType();
+        // Get the name of the consumed item
+        String itemName = event.getItem().getType().toString();
 
-        // Check if this item has custom effects based on the recipe config
-        Map<String, Object> recipes = plugin.getConfig().getConfigurationSection("recipes.custom_recipes").getValues(false);
-        for (String recipeKey : recipes.keySet()) {
-            if (plugin.getConfig().getBoolean("recipes.custom_recipes." + recipeKey, false)) {
-                Map<String, Object> recipeData = (Map<String, Object>) recipes.get(recipeKey);
-                String result = (String) recipeData.get("result");
-                if (Material.getMaterial(result) == itemType) {
-                    List<Map<String, Object>> effects = (List<Map<String, Object>>) recipeData.get("effects");
-                    if (effects != null) {
-                        applyEffects(event, effects);
-                    }
+        // Check if the item has effects defined in the config
+        Map<String, Object> itemEffects = plugin.getConfig().getConfigurationSection("recipes.effects").getValues(false);
+        
+        if (itemEffects != null && itemEffects.containsKey(itemName)) {
+            // Apply the effects dynamically based on the config
+            Map<String, Object> effects = (Map<String, Object>) itemEffects.get(itemName);
+            
+            // Iterate over the effects and apply them
+            for (String effectType : effects.keySet()) {
+                int duration = (int) effects.get("duration");
+                int amplifier = (int) effects.get("amplifier");
+                
+                PotionEffectType potionEffectType = getPotionEffectType(effectType);
+                if (potionEffectType != null) {
+                    event.getPlayer().addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
                 }
-            }
-        }
-    }
-
-    private void applyEffects(PlayerItemConsumeEvent event, List<Map<String, Object>> effects) {
-        for (Map<String, Object> effectData : effects) {
-            String effectType = (String) effectData.get("type");
-            int duration = (int) effectData.get("duration");
-            int amplifier = (int) effectData.get("amplifier");
-
-            PotionEffectType potionEffectType = getPotionEffectType(effectType);
-            if (potionEffectType != null) {
-                event.getPlayer().addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
             }
         }
     }
