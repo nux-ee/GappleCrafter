@@ -171,7 +171,7 @@ public class RecipeManager {
             case "ABSORPTION":
                 return PotionEffectType.ABSORPTION;
             case "RESISTANCE":
-                return PotionEffectType.DAMAGE_RESISTANCE;
+                return PotionEffectType.RESISTANCE;
             default:
                 return null;
         }
