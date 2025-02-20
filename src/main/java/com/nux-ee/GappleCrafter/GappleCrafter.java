@@ -1,4 +1,4 @@
-package com.nux.ee.GappleCrafter;
+package com.nux-ee.GappleCrafter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class GappleCrafter extends JavaPlugin {
