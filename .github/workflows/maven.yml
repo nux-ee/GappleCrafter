@@ -21,6 +21,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+
     
     # Cache dependencies to speed up the build
     - name: Cache Maven dependencies
