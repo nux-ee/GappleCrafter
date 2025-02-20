@@ -1,0 +1,19 @@
+recipes:
+  enchanted_potato:
+    result: POTATO
+    amount: 1
+    enchantments: []
+    shape:
+      - "DDD"
+      - "DPD"
+      - "DDD"
+    ingredients:
+      D: DIAMOND_BLOCK
+      P: POTATO
+    effects:
+      - type: "REGENERATION"
+        duration: 200
+        amplifier: 1
+      - type: "SPEED"
+        duration: 300
+        amplifier: 1
