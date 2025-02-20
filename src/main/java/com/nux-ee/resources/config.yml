@@ -1,32 +1,7 @@
+# config.yml
 recipes:
-  enchanted_potato:
-    result: "POTATO"
-    amount: 1
-    shape:
-      - "DDD"
-      - "DID"
-      - "DDD"
-    ingredients:
-      D: "DIAMOND_BLOCK"
-      I: "IRON_BLOCK"
-    effects:
-      - type: "REGENERATION"
-        duration: 200
-        amplifier: 1
-      - type: "SPEED"
-        duration: 300
-        amplifier: 1
-  enchanted_golden_apple:
-    result: "GOLDEN_APPLE"
-    amount: 1
-    shape:
-      - "GGG"
-      - "GAG"
-      - "GGG"
-    ingredients:
-      G: "GOLD_BLOCK"
-      A: "APPLE"
-    effects:
-      - type: "REGENERATION"
-        duration: 400
-        amplifier: 2
+  notch_apple: true  # Enable or disable the Notch Apple recipe (hardcoded)
+  custom_recipes:  # Enable or disable custom recipes defined in recipe_config.yml
+    enchanted_potato: true
+    enchanted_carrot: false
+    # Add more custom recipes here as you define them
