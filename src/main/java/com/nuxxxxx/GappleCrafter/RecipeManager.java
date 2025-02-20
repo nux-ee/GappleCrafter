@@ -1,7 +1,7 @@
 package com.nuxxxxx.GappleCrafter;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;  // Add this import
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -77,14 +77,14 @@ public class RecipeManager {
 
     private static void addCustomRecipe(String key, Map<String, Object> recipeData) {
         String result = (String) recipeData.get("result");
-        int amount = (int) recipeData.get("amount");
-        List<String> shape = (List<String>) recipeData.get("shape");
+        int amount = recipeData.containsKey("amount") ? (int) recipeData.get("amount") : 1; // Default to 1 if not present
+        List<String> shape = recipeData.containsKey("shape") ? (List<String>) recipeData.get("shape") : List.of("XXX", "XAX", "XXX"); // Default shape
         Map<String, String> ingredients = (Map<String, String>) recipeData.get("ingredients");
         List<Map<String, Object>> effects = (List<Map<String, Object>>) recipeData.get("effects");
 
         Material resultMaterial = Material.getMaterial(result);
         if (resultMaterial == null) {
-            plugin.getLogger().warning("Invalid material: " + result);
+            plugin.getLogger().warning("Invalid material for result: " + result);
             return;
         }
 
@@ -99,13 +99,15 @@ public class RecipeManager {
         recipe.shape(shape.toArray(new String[0]));
 
         // Set the ingredients for the recipe
-        for (Map.Entry<String, String> entry : ingredients.entrySet()) {
-            char ingredientKey = entry.getKey().charAt(0);
-            Material ingredientMaterial = Material.getMaterial(entry.getValue());
-            if (ingredientMaterial != null) {
-                recipe.setIngredient(ingredientKey, ingredientMaterial);
-            } else {
-                plugin.getLogger().warning("Invalid material: " + entry.getValue());
+        if (ingredients != null) {
+            for (Map.Entry<String, String> entry : ingredients.entrySet()) {
+                char ingredientKey = entry.getKey().charAt(0);
+                Material ingredientMaterial = Material.getMaterial(entry.getValue());
+                if (ingredientMaterial != null) {
+                    recipe.setIngredient(ingredientKey, ingredientMaterial);
+                } else {
+                    plugin.getLogger().warning("Invalid material for ingredient: " + entry.getValue());
+                }
             }
         }
 
@@ -120,14 +122,16 @@ public class RecipeManager {
         if (effects != null) {
             for (Map<String, Object> effectData : effects) {
                 String effectType = (String) effectData.get("type");
-                int duration = (int) effectData.get("duration");
-                int amplifier = (int) effectData.get("amplifier");
+                int duration = effectData.containsKey("duration") ? (int) effectData.get("duration") : 200; // Default duration
+                int amplifier = effectData.containsKey("amplifier") ? (int) effectData.get("amplifier") : 1; // Default amplifier
 
                 PotionEffectType potionEffectType = getPotionEffectType(effectType);
                 if (potionEffectType != null) {
                     plugin.getLogger().info("Applying effect: " + effectType);
                     // In practice, apply effects when the item is consumed, etc.
                     // For example: player.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+                } else {
+                    plugin.getLogger().warning("Invalid effect type: " + effectType);
                 }
             }
         }
@@ -140,9 +144,9 @@ public class RecipeManager {
             case "SPEED":
                 return PotionEffectType.SPEED;
             case "STRENGTH":
-                return PotionEffectType.STRENGTH;  // Correct constant for Strength
+                return PotionEffectType.STRENGTH;
             case "JUMP":
-                return PotionEffectType.JUMP_BOOST;  // Correct constant for Jump Boost
+                return PotionEffectType.JUMP_BOOST;
             default:
                 return null;
         }
