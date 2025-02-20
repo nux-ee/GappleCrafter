@@ -49,4 +49,95 @@ public class RecipeManager {
         for (String recipeKey : recipes.keySet()) {
             if (plugin.getConfig().getBoolean("recipes.custom_recipes." + recipeKey, false)) {
                 Map<String, Object> recipeData = (Map<String, Object>) recipes.get(recipeKey);
-                addCustomRecipe(recipeKey,
+                addCustomRecipe(recipeKey, recipeData);
+            }
+        }
+    }
+
+    private static void addNotchAppleRecipe() {
+        ItemStack notchApple = new ItemStack(Material.GOLDEN_APPLE, 1);
+        ItemMeta meta = notchApple.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName("§6Notch Apple");
+            notchApple.setItemMeta(meta);
+        }
+
+        ShapedRecipe recipe = new ShapedRecipe(notchApple);
+        recipe.shape("GGG", "GAG", "GGG");
+        recipe.setIngredient('G', Material.GOLD_BLOCK);  // Changed to GOLD_BLOCK
+        recipe.setIngredient('A', Material.APPLE);
+
+        plugin.getServer().addRecipe(recipe);
+        plugin.getLogger().info("Notch Apple recipe has been enabled and added.");
+    }
+
+    private static void addCustomRecipe(String key, Map<String, Object> recipeData) {
+        String result = (String) recipeData.get("result");
+        int amount = (int) recipeData.get("amount");
+        List<String> shape = (List<String>) recipeData.get("shape");
+        Map<String, String> ingredients = (Map<String, String>) recipeData.get("ingredients");
+        List<Map<String, Object>> effects = (List<Map<String, Object>>) recipeData.get("effects");
+
+        Material resultMaterial = Material.getMaterial(result);
+        if (resultMaterial == null) {
+            plugin.getLogger().warning("Invalid material: " + result);
+            return;
+        }
+
+        // Create the result item
+        ItemStack resultItem = new ItemStack(resultMaterial, amount);
+
+        // Create the shaped recipe
+        ShapedRecipe recipe = new ShapedRecipe(resultItem);
+        recipe.shape(shape.toArray(new String[0]));
+
+        // Set the ingredients for the recipe
+        for (Map.Entry<String, String> entry : ingredients.entrySet()) {
+            char ingredientKey = entry.getKey().charAt(0);
+            Material ingredientMaterial = Material.getMaterial(entry.getValue());
+            if (ingredientMaterial != null) {
+                recipe.setIngredient(ingredientKey, ingredientMaterial);
+            } else {
+                plugin.getLogger().warning("Invalid material: " + entry.getValue());
+            }
+        }
+
+        // Add the recipe to the server
+        plugin.getServer().addRecipe(recipe);
+
+        // Apply the effects when the item is used
+        applyEffects(resultItem, effects);
+    }
+
+    private static void applyEffects(ItemStack item, List<Map<String, Object>> effects) {
+        if (effects != null) {
+            for (Map<String, Object> effectData : effects) {
+                String effectType = (String) effectData.get("type");
+                int duration = (int) effectData.get("duration");
+                int amplifier = (int) effectData.get("amplifier");
+
+                PotionEffectType potionEffectType = getPotionEffectType(effectType);
+                if (potionEffectType != null) {
+                    plugin.getLogger().info("Applying effect: " + effectType);
+                    // In practice, apply effects when the item is consumed, etc.
+                    // For example: player.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+                }
+            }
+        }
+    }
+
+    private static PotionEffectType getPotionEffectType(String effectType) {
+        switch (effectType.toUpperCase()) {
+            case "REGENERATION":
+                return PotionEffectType.REGENERATION;
+            case "SPEED":
+                return PotionEffectType.SPEED;
+            case "STRENGTH":
+                return PotionEffectType.INCREASE_DAMAGE;
+            case "JUMP":
+                return PotionEffectType.JUMP;
+            default:
+                return null;
+        }
+    }
+}
