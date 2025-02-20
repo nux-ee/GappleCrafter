@@ -7,12 +7,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,33 +22,25 @@ public class RecipeManager {
     }
 
     public static void loadRecipes() {
-        File configFile = new File(plugin.getDataFolder(), "config.yml");
-
-        if (!configFile.exists()) {
-            plugin.saveResource("config.yml", false); // Save the default config if it doesn't exist
-        }
-
         plugin.reloadConfig();
-        List<Map<String, Object>> recipes = (List<Map<String, Object>>) plugin.getConfig().getList("recipes");
+        List<Map<?, ?>> recipes = plugin.getConfig().getMapList("recipes");
 
-        for (Map<String, Object> recipeData : recipes) {
+        for (Map<?, ?> recipeData : recipes) {
             String result = (String) recipeData.get("result");
             int amount = (int) recipeData.get("amount");
             List<String> shape = (List<String>) recipeData.get("shape");
             Map<String, String> ingredients = (Map<String, String>) recipeData.get("ingredients");
             List<Map<String, Object>> effects = (List<Map<String, Object>>) recipeData.get("effects");
 
-            // Parse the result item (e.g., "POTATO")
+            // Create the result item
             Material resultMaterial = Material.getMaterial(result);
             if (resultMaterial == null) {
                 plugin.getLogger().warning("Invalid material: " + result);
                 continue;
             }
-
-            // Create the result item
             ItemStack resultItem = new ItemStack(resultMaterial, amount);
 
-            // Create the shaped recipe
+            // Create the recipe
             ShapedRecipe recipe = new ShapedRecipe(resultItem);
             recipe.shape(shape.toArray(new String[0]));
 
@@ -67,16 +55,15 @@ public class RecipeManager {
                 }
             }
 
-            // Add the recipe to the server
+            // Register the recipe
             plugin.getServer().addRecipe(recipe);
 
-            // Apply the effects when the item is used
+            // Apply the effects
             applyEffects(resultItem, effects);
         }
     }
 
     public static void applyEffects(ItemStack item, List<Map<String, Object>> effects) {
-        // Apply potion effects based on the item's use
         if (effects != null) {
             for (Map<String, Object> effectData : effects) {
                 String effectType = (String) effectData.get("type");
@@ -85,11 +72,9 @@ public class RecipeManager {
 
                 PotionEffectType potionEffectType = getPotionEffectType(effectType);
                 if (potionEffectType != null) {
-                    // Here you can apply effects based on item usage, such as PlayerItemConsumeEvent
-                    // For simplicity, we're just logging the effects for now
-                    plugin.getLogger().info("Applying effect: " + effectType);
-                    // This is just a demonstration, in practice you'd apply these when the player consumes or uses the item.
-                    // e.g., player.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+                    // Here you would apply the effect on item use (PlayerItemConsumeEvent or similar)
+                    // We're just logging the effect for now
+                    plugin.getLogger().info("Effect applied: " + effectType + " for " + duration + " ticks.");
                 }
             }
         }
