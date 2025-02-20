@@ -3,6 +3,7 @@ name: Java CI with Maven
 on:
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:  # This enables manual triggering from GitHub UI
 
 jobs:
   build:
