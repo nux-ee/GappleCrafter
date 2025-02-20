@@ -1,21 +1,18 @@
 package com.nuxxxxx.GappleCrafter;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RecipeManager {
 
     private static JavaPlugin plugin;
+    private static Map<Material, List<PotionEffect>> itemEffectsMap = new HashMap<>();
 
     public static void setup(JavaPlugin pluginInstance) {
         plugin = pluginInstance;
@@ -23,108 +20,48 @@ public class RecipeManager {
     }
 
     public static void loadRecipes() {
-        // Load the config to check which recipes are enabled
-        File configFile = new File(plugin.getDataFolder(), "config.yml");
-        if (!configFile.exists()) {
-            plugin.saveResource("config.yml", false); // Save default config if it doesn't exist
-        }
-        plugin.reloadConfig();
-
-        // Hardcoded Notch Apple
-        if (plugin.getConfig().getBoolean("recipes.notch_apple", false)) {
-            addNotchAppleRecipe();
-        }
-
-        // Load custom recipes from recipe_config.yml
+        // Load custom recipes and effects from recipe_config.yml
         File recipesFile = new File(plugin.getDataFolder(), "recipe_config.yml");
         if (!recipesFile.exists()) {
             plugin.saveResource("recipe_config.yml", false); // Save default recipes if not present
         }
+
         plugin.reloadConfig();
+        Map<String, Object> recipes = plugin.getConfig().getConfigurationSection("recipes").getValues(false);
 
-        Map<String, Object> recipes = plugin.getConfig().getConfigurationSection("recipes.custom_recipes").getValues(false);
-
-        // Load and add custom recipes based on config
+        // Load and store effects for each custom recipe
         for (String recipeKey : recipes.keySet()) {
-            if (plugin.getConfig().getBoolean("recipes.custom_recipes." + recipeKey, false)) {
-                Map<String, Object> recipeData = (Map<String, Object>) recipes.get(recipeKey);
-                addCustomRecipe(recipeKey, recipeData);
-            }
-        }
-    }
+            Map<String, Object> recipeData = (Map<String, Object>) recipes.get(recipeKey);
 
-    private static void addNotchAppleRecipe() {
-        ItemStack notchApple = new ItemStack(Material.GOLDEN_APPLE, 1);
-        ItemMeta meta = notchApple.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName("§6Notch Apple");
-            notchApple.setItemMeta(meta);
-        }
-
-        ShapedRecipe recipe = new ShapedRecipe(notchApple);
-        recipe.shape("GGG", "GAG", "GGG");
-        recipe.setIngredient('G', Material.GOLD_BLOCK);  // Changed to GOLD_BLOCK
-        recipe.setIngredient('A', Material.APPLE);
-
-        plugin.getServer().addRecipe(recipe);
-        plugin.getLogger().info("Notch Apple recipe has been enabled and added.");
-    }
-
-    private static void addCustomRecipe(String key, Map<String, Object> recipeData) {
-        String result = (String) recipeData.get("result");
-        int amount = (int) recipeData.get("amount");
-        List<String> shape = (List<String>) recipeData.get("shape");
-        Map<String, String> ingredients = (Map<String, String>) recipeData.get("ingredients");
-        List<Map<String, Object>> effects = (List<Map<String, Object>>) recipeData.get("effects");
-
-        Material resultMaterial = Material.getMaterial(result);
-        if (resultMaterial == null) {
-            plugin.getLogger().warning("Invalid material: " + result);
-            return;
-        }
-
-        // Create the result item
-        ItemStack resultItem = new ItemStack(resultMaterial, amount);
-
-        // Create the shaped recipe
-        ShapedRecipe recipe = new ShapedRecipe(resultItem);
-        recipe.shape(shape.toArray(new String[0]));
-
-        // Set the ingredients for the recipe
-        for (Map.Entry<String, String> entry : ingredients.entrySet()) {
-            char ingredientKey = entry.getKey().charAt(0);
-            Material ingredientMaterial = Material.getMaterial(entry.getValue());
-            if (ingredientMaterial != null) {
-                recipe.setIngredient(ingredientKey, ingredientMaterial);
-            } else {
-                plugin.getLogger().warning("Invalid material: " + entry.getValue());
-            }
-        }
-
-        // Add the recipe to the server
-        plugin.getServer().addRecipe(recipe);
-
-        // Apply the effects when the item is used
-        applyEffects(resultItem, effects);
-    }
-
-    private static void applyEffects(ItemStack item, List<Map<String, Object>> effects) {
-        if (effects != null) {
-            for (Map<String, Object> effectData : effects) {
-                String effectType = (String) effectData.get("type");
-                int duration = (int) effectData.get("duration");
-                int amplifier = (int) effectData.get("amplifier");
-
-                PotionEffectType potionEffectType = getPotionEffectType(effectType);
-                if (potionEffectType != null) {
-                    plugin.getLogger().info("Applying effect: " + effectType);
-                    // In practice, apply effects when the item is consumed, etc.
-                    // For example: player.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier));
+            // Check if the recipe has effects
+            List<Map<String, Object>> effects = (List<Map<String, Object>>) recipeData.get("effects");
+            if (effects != null && !effects.isEmpty()) {
+                Material resultMaterial = Material.getMaterial((String) recipeData.get("result"));
+                if (resultMaterial != null) {
+                    List<PotionEffect> potionEffects = loadEffects(effects);
+                    itemEffectsMap.put(resultMaterial, potionEffects);
                 }
             }
         }
     }
 
+    // Load effects from the configuration
+    private static List<PotionEffect> loadEffects(List<Map<String, Object>> effectsData) {
+        List<PotionEffect> effects = new ArrayList<>();
+        for (Map<String, Object> effectData : effectsData) {
+            String effectTypeStr = (String) effectData.get("type");
+            int duration = (int) effectData.get("duration");
+            int amplifier = (int) effectData.get("amplifier");
+
+            PotionEffectType effectType = getPotionEffectType(effectTypeStr);
+            if (effectType != null) {
+                effects.add(new PotionEffect(effectType, duration, amplifier));
+            }
+        }
+        return effects;
+    }
+
+    // Convert the effect type from String to PotionEffectType
     private static PotionEffectType getPotionEffectType(String effectType) {
         switch (effectType.toUpperCase()) {
             case "REGENERATION":
@@ -132,11 +69,16 @@ public class RecipeManager {
             case "SPEED":
                 return PotionEffectType.SPEED;
             case "STRENGTH":
-                return PotionEffectType.STRENGTH;  // Correct constant for Strength
+                return PotionEffectType.STRENGTH;
             case "JUMP":
-                return PotionEffectType.JUMP_BOOST;  // Correct constant for Jump Boost
+                return PotionEffectType.JUMP_BOOST;
             default:
                 return null;
         }
+    }
+
+    // Provide access to the effects map
+    public static Map<Material, List<PotionEffect>> getItemEffectsMap() {
+        return itemEffectsMap;
     }
 }
