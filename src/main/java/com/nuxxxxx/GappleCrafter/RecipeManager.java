@@ -2,7 +2,6 @@ package com.nuxxxxx.GappleCrafter;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -38,7 +37,8 @@ public class RecipeManager {
             plugin.saveResource("recipe_config.yml", false); // Save default recipes if not present
         }
 
-        plugin.reloadConfig();
+        // Load the recipe configuration file
+        plugin.reloadConfig();  // Ensure the config is reloaded after any new resources
         Map<String, Object> recipes = plugin.getConfig().getConfigurationSection("recipes").getValues(false);
 
         // Hardcoded Notch Apple
