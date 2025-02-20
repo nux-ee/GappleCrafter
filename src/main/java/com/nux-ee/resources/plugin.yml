@@ -1,6 +1,6 @@
 name: GappleCrafter
 version: 1.0
-main: com.nux_ee.GappleCrafter.GappleCrafter
+main: com.nux.ee.GappleCrafter.GappleCrafter
 api-version: 1.21.4
 commands:
   craftgapple:
