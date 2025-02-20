@@ -1,5 +1,5 @@
 package com.nux.ee.GappleCrafter;
-
+import org.bukkit.Material;  // Add this import
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
